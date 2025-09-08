@@ -52,9 +52,14 @@ public class Mavenproject1 {
                 case 1:                    
                         Caso1 () ;
                         break;
+                        
                 case 2:    
                        Caso2 () ;
                        break;
+                       
+                case 3:    
+                       Caso3 () ;
+                       break;       
             }  //Fin switch  
 
             
@@ -128,46 +133,117 @@ public class Mavenproject1 {
                     System.out.println("2. RETROCEDER");
                     opcion = scanner.nextInt() ;
                     
-        }while(opcion != 2) ;        
-                    
+        }while(opcion != 2) ;                          
 } //Fin caso 1
     
     //metodo caso 2
     
     static public void Caso2 ()  { //inicio caso 2
+        boolean bus = false;
+                    int posicion = -1 ;                   
+                    int rep = 0;
         do{
-                    boolean bus = false;
-                    int posicion = -1 ;
                     scanner.nextLine();
                     System.out.println("---BUSCAR PRODUCTO---");
+                    System.out.println("1. Buscar Producto Por Nombre");
+                    System.out.println("2. Buscar Producto Por Categoria");
+                    System.out.println("3. Buscar Producto por Codigo Unico");
+                    System.out.println("4. RETROCEDER");
+                    opcion = scanner.nextInt();
+            switch(opcion){
+                case 1:
+                    do{
+                        scanner.nextLine();
                     System.out.println("INGRESAR NOMBRE DEL PRODUCTO A BUSCAR");
                     Dato = scanner.nextLine().strip() ;
-                    int i=0  ;
-                    while(i< 25 && bus == false){
+                
+                    for(int i=0; i < contador; i++){
                         if(NombreProducto[i] != null && NombreProducto[i].equalsIgnoreCase(Dato)){
-                            bus = true;
-                            posicion = i ;
-                        }
-                        i ++ ;
+                            rep ++;
+                            System.out.println("Nombre de Producto: "+ NombreProducto[i] );
+                            System.out.println("Categoria de Producto: "+ CategoriaProducto[i]);
+                            System.out.println("Precio Prducto "+"Q."+ Precios[i]);
+                            System.out.println("Stock de Producto: "+ CantidadStock[i]);
+                            System.out.println("Codigo Unico Producto: "+CodigoUnico[i]);
+                        }                   
                     }
-                    if(bus == false){
+                    if(rep == 0){
                         System.out.println("NO SE HA ENCONTRADO EL PRODUCTO");
-                    }
-                    else{
-                        System.out.println("Nombre de Producto: "+ NombreProducto[posicion] );
-                        System.out.println("Categoria de Producto: "+ CategoriaProducto[posicion]);
-                        System.out.println("Precio Prducto "+"Q."+ Precios[posicion]);
-                        System.out.println("Stock de Producto: "+ CantidadStock[posicion]);
-                        System.out.println("Codigo Unico Producto: "+CodigoUnico[posicion]);
                     }
                     System.out.println("1. BUSCAR OTRO PRODUCTO");
                     System.out.println("2. RETROCEDER");
                     opcion = scanner.nextInt() ;
-          }while(opcion != 2) ;
+                    }while(opcion != 2) ;
                     
+                case 2 :
+                    do{
+                        scanner.nextLine();
+                    System.out.println("INGRESAR CATEGORIA DEL PRODUCTO A BUSCAR");
+                    Dato = scanner.nextLine().strip() ;
+                
+                    for(int i=0; i < contador; i++){
+                        if(CategoriaProducto[i] != null && CategoriaProducto[i].equalsIgnoreCase(Dato)){
+                            rep ++;
+                            System.out.println("Nombre de Producto: "+ NombreProducto[i] );
+                            System.out.println("Categoria de Producto: "+ CategoriaProducto[i]);
+                            System.out.println("Precio Prducto "+"Q."+ Precios[i]);
+                            System.out.println("Stock de Producto: "+ CantidadStock[i]);
+                            System.out.println("Codigo Unico Producto: "+CodigoUnico[i]);
+                        }                   
+                    }
+                    if(rep == 0){
+                        System.out.println("NO SE HA ENCONTRADO EL PRODUCTO");
+                    }
+                    System.out.println("1. BUSCAR OTRO PRODUCTO");
+                    System.out.println("2. RETROCEDER");
+                    opcion = scanner.nextInt() ;
+                    }while(opcion != 2) ;
+                
+                case 3:
+                    do{
+                        scanner.nextLine();
+                    System.out.println("INGRESAR CODIGO UNICO DEL PRODUCTO A BUSCAR");
+                    Dato = scanner.nextLine() ;
+                
+                    for(int i=0; i < contador; i++){
+                        if(CodigoUnico[i] != null && CodigoUnico[i].equalsIgnoreCase(Dato)){
+                            rep ++;
+                            System.out.println("Nombre de Producto: "+ NombreProducto[i] );
+                            System.out.println("Categoria de Producto: "+ CategoriaProducto[i]);
+                            System.out.println("Precio Prducto "+"Q."+ Precios[i]);
+                            System.out.println("Stock de Producto: "+ CantidadStock[i]);
+                            System.out.println("Codigo Unico Producto: "+CodigoUnico[i]);
+                        }                   
+                    }
+                    if(rep == 0){
+                        System.out.println("NO SE HA ENCONTRADO EL PRODUCTO");
+                    }
+                    System.out.println("1. BUSCAR OTRO PRODUCTO");
+                    System.out.println("2. RETROCEDER");
+                    opcion = scanner.nextInt() ;
+                    }while(opcion != 2) ;
                     
-                     
+            }//Fin switch       
+          }while(opcion != 4) ;         
+        
     } //fin caso2
+    
+    public static void Caso3() {
+        do {
+        
+        
+            
+            
+            
+            System.out.println("1. BUSCAR OTRO PRODUCTO");
+                    System.out.println("2. RETROCEDER");
+                    opcion = scanner.nextInt() ;
+                    
+        }while(opcion != 2) ;
+        
+        
+}//Fin Caso 3
+    
     
     
     
