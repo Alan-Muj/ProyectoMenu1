@@ -174,7 +174,7 @@ public class Mavenproject1 {
                     System.out.println("2. RETROCEDER");
                     opcion = scanner.nextInt() ;
                     }while(opcion != 2) ;
-                    
+                    break ;
                 case 2 :
                     do{
                         scanner.nextLine();
@@ -198,7 +198,7 @@ public class Mavenproject1 {
                     System.out.println("2. RETROCEDER");
                     opcion = scanner.nextInt() ;
                     }while(opcion != 2) ;
-                
+                    break ;
                 case 3:
                     do{
                         scanner.nextLine();
@@ -222,24 +222,64 @@ public class Mavenproject1 {
                     System.out.println("2. RETROCEDER");
                     opcion = scanner.nextInt() ;
                     }while(opcion != 2) ;
-                    
+                    break ;
             }//Fin switch       
           }while(opcion != 4) ;         
-        
+                    
     } //fin caso2
     
     public static void Caso3() {
-        do {
-        
-        
-            
-            
-            
-            System.out.println("1. BUSCAR OTRO PRODUCTO");
+        int poselim = 0; //Varibale para eliminar producto
+        do{
+            int rep = 0 ;
+                        scanner.nextLine();
+                    System.out.println("INGRESAR CODIGO UNICO DEL PRODUCTO A ELIMINAR");
+                    Dato = scanner.nextLine() ;
+                    for(int i=0; i < contador; i++){
+                        if(CodigoUnico[i] != null && CodigoUnico[i].equalsIgnoreCase(Dato)){
+                            rep ++;
+                            System.out.println("¿DESEA ELIMINAR ESTE PRODUCTO?");
+                            System.out.println("Nombre de Producto: "+ NombreProducto[i] );
+                            System.out.println("Categoria de Producto: "+ CategoriaProducto[i]);
+                            System.out.println("Precio Prducto "+"Q."+ Precios[i]);
+                            System.out.println("Stock de Producto: "+ CantidadStock[i]);
+                            System.out.println("Codigo Unico Producto: "+CodigoUnico[i]);
+                            i = poselim ;
+                            System.out.println("1. ACEPTAR");
+                            System.out.println("2. RETROCEDER");
+                            opcion = scanner.nextInt() ;
+                        }                   
+                    }
+                    if(rep == 0){
+                        System.out.println("NO SE HA ENCONTRADO EL PRODUCTO");
+                    }
+                    if(opcion == 1) {
+                        for(int j = poselim ; j < contador - 1; j++){
+                    NombreProducto[j] = NombreProducto[j+1];
+                    CategoriaProducto[j] = CategoriaProducto[j+1];
+                    Precios[j] = Precios[j+1];
+                    CantidadStock[j] = CantidadStock[j+1];
+                    CodigoUnico[j] = CodigoUnico[j+1];
+                    }
+                    
+                    NombreProducto[contador-1] = null;
+                    CategoriaProducto[contador-1] = null;
+                    Precios[contador-1] = 0;
+                    CantidadStock[contador-1] = 0;
+                    CodigoUnico[contador-1] = null;
+
+                    contador--;
+                    System.out.println("EL PRODUCTO HA SIDO ELIMINADO");
+
+                       
+                   } else {
+                      System.out.println("ELIMINACIÓN CANCELADA");  
+                    }
+                    
+                    System.out.println("1. ELIMINAR OTRO PRODUCTO");
                     System.out.println("2. RETROCEDER");
                     opcion = scanner.nextInt() ;
-                    
-        }while(opcion != 2) ;
+                    }while(opcion != 2) ;
         
         
 }//Fin Caso 3
