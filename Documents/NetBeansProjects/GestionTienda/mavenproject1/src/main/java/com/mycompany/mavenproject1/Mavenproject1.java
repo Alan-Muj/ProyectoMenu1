@@ -4,7 +4,6 @@
 
 package com.mycompany.mavenproject1;
 
-import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -17,7 +16,7 @@ public class Mavenproject1 {
     static double Precio ;
     static double Stock ;
     static String CUnico ; //Variable para codigo repetido
-    static String Dato ; //Variabel para buscar nombre
+    static String Dato ; //Variabel para buscar 
     static int contador = 0 ;    
     static Scanner scanner=new Scanner(System.in);
     static String[] NombreUsuario = new String[10] ; //Vector para usuario
@@ -59,7 +58,11 @@ public class Mavenproject1 {
                        
                 case 3:    
                        Caso3 () ;
-                       break;       
+                       break;
+                       
+                case 4:
+                       Caso4 () ;
+                       break ; 
             }  //Fin switch  
 
             
@@ -90,6 +93,7 @@ public class Mavenproject1 {
                     System.out.println("Accesorios");
                     System.out.println("Ropa deportiva");
                     System.out.println("Ropa de dormir");
+                    System.out.println("INGRESAR CATEGORIA: ");
                     CategoriaProducto [contador] = scanner.nextLine().strip() ;
                     
                     do {
@@ -138,9 +142,7 @@ public class Mavenproject1 {
     
     //metodo caso 2
     
-    static public void Caso2 ()  { //inicio caso 2
-        boolean bus = false;
-                    int posicion = -1 ;                   
+    static public void Caso2 ()  { //inicio caso 2                   
                     int rep = 0;
         do{
                     scanner.nextLine();
@@ -154,6 +156,7 @@ public class Mavenproject1 {
                 case 1:
                     do{
                         scanner.nextLine();
+                    System.out.println("--- BUSCAR PRODUCTO ---");    
                     System.out.println("INGRESAR NOMBRE DEL PRODUCTO A BUSCAR");
                     Dato = scanner.nextLine().strip() ;
                 
@@ -178,6 +181,7 @@ public class Mavenproject1 {
                 case 2 :
                     do{
                         scanner.nextLine();
+                    System.out.println("--- BUSCAR PRODUCTO ---");    
                     System.out.println("INGRESAR CATEGORIA DEL PRODUCTO A BUSCAR");
                     Dato = scanner.nextLine().strip() ;
                 
@@ -202,6 +206,7 @@ public class Mavenproject1 {
                 case 3:
                     do{
                         scanner.nextLine();
+                    System.out.println("--- BUSCAR PRODUCTO ---");    
                     System.out.println("INGRESAR CODIGO UNICO DEL PRODUCTO A BUSCAR");
                     Dato = scanner.nextLine() ;
                 
@@ -228,11 +233,14 @@ public class Mavenproject1 {
                     
     } //fin caso2
     
-    public static void Caso3() {
-        int poselim = 0; //Varibale para eliminar producto
+    
+    //Metodo 3
+    public static void Caso3() { //Inicio caso 3
+        int PosElim = 0; //Varibale para eliminar producto
         do{
             int rep = 0 ;
                         scanner.nextLine();
+                    System.out.println("--- ELIMINAR PRODUCTO ---");
                     System.out.println("INGRESAR CODIGO UNICO DEL PRODUCTO A ELIMINAR");
                     Dato = scanner.nextLine() ;
                     for(int i=0; i < contador; i++){
@@ -244,7 +252,7 @@ public class Mavenproject1 {
                             System.out.println("Precio Prducto "+"Q."+ Precios[i]);
                             System.out.println("Stock de Producto: "+ CantidadStock[i]);
                             System.out.println("Codigo Unico Producto: "+CodigoUnico[i]);
-                            i = poselim ;
+                            i = PosElim ;
                             System.out.println("1. ACEPTAR");
                             System.out.println("2. RETROCEDER");
                             opcion = scanner.nextInt() ;
@@ -254,7 +262,88 @@ public class Mavenproject1 {
                         System.out.println("NO SE HA ENCONTRADO EL PRODUCTO");
                     }
                     if(opcion == 1) {
-                        for(int j = poselim ; j < contador - 1; j++){
+                        for(int j = PosElim ; j < contador - 1; j++){
+                    NombreProducto[j] = NombreProducto[j+1];
+                    CategoriaProducto[j] = CategoriaProducto[j+1];
+                    Precios[j] = Precios[j+1];
+                    CantidadStock[j] = CantidadStock[j+1];
+                    CodigoUnico[j] = CodigoUnico[j+1];
+                    }
+                    
+                    NombreProducto[contador-1] = null;
+                    CategoriaProducto[contador-1] = null;
+                    Precios[contador-1] = 0;
+                    CantidadStock[contador-1] = 0;
+                    CodigoUnico[contador-1] = null;
+
+                    contador--;
+                    System.out.println("EL PRODUCTO HA SIDO ELIMINADO");
+
+                       
+                   } else {
+                      System.out.println("ELIMINACIÓN CANCELADA");  
+                    }
+                    
+                    System.out.println("1. ELIMINAR OTRO PRODUCTO");
+                    System.out.println("2. RETROCEDER");
+                    opcion = scanner.nextInt() ;
+                    }while(opcion != 2) ;    
+}//Fin Caso 3
+    
+    //Inicio metodo 4
+    public static void Caso4() {
+        int PosElim = 0;
+        double Venta = 0; //Varibale para venta producto
+        do{
+            int rep = 0 ;
+                        scanner.nextLine();
+                   System.out.println("--- REGSITRAR VENTA ---");
+                   System.out.println("INGRESAR CODIGO UNICO DEL PRODUCTO A VENDER");
+                    Dato = scanner.nextLine() ;
+                    for(int i=0; i < contador; i++){
+                        if(CodigoUnico[i] != null && CodigoUnico[i].equalsIgnoreCase(Dato)){
+                            rep ++;
+                            System.out.println("PRODUCTO A VENDER");
+                            System.out.println("Nombre de Producto: "+ NombreProducto[i] );
+                            System.out.println("Categoria de Producto: "+ CategoriaProducto[i]);
+                            System.out.println("Precio Prducto "+"Q."+ Precios[i]);
+                            System.out.println("Stock de Producto: "+ CantidadStock[i]);
+                            System.out.println("INGRESAR CANTIDAD DE UNIDADES A VENDER: ");
+                            Venta = scanner.nextInt() ;
+                            if(CantidadStock[i]<= Venta){
+                            CantidadStock[i] = CantidadStock[i] - Venta ;
+                            if(CantidadStock[i]-Venta == 0){
+                            for(int j = PosElim ; j < contador - 1; j++){
+                            NombreProducto[j] = NombreProducto[j+1];
+                            CategoriaProducto[j] = CategoriaProducto[j+1];
+                            Precios[j] = Precios[j+1];
+                            CantidadStock[j] = CantidadStock[j+1];
+                            CodigoUnico[j] = CodigoUnico[j+1];
+                        }
+                    
+                            NombreProducto[contador-1] = null;
+                            CategoriaProducto[contador-1] = null;
+                            Precios[contador-1] = 0;
+                            CantidadStock[contador-1] = 0;
+                            CodigoUnico[contador-1] = null;
+
+                            contador--;    
+                            }
+                            
+                            } else{
+                                System.out.println("NO HAY STOCK SUFICIENTE PARA REALIZAR LA VENTA");
+                                System.out.println("Hay "+ CantidadStock[i] + " unidades de este producto");
+                        }
+                            System.out.println("1. ACEPTAR");
+                            System.out.println("2. RETROCEDER");
+                            opcion = scanner.nextInt() ;
+                        }                   
+                    }
+                    if(rep == 0){
+                        System.out.println("NO SE HA ENCONTRADO EL PRODUCTO");
+                    }
+                    if(opcion == 1) {
+                        for(int j = PosElim ; j < contador - 1; j++){
                     NombreProducto[j] = NombreProducto[j+1];
                     CategoriaProducto[j] = CategoriaProducto[j+1];
                     Precios[j] = Precios[j+1];
@@ -280,9 +369,11 @@ public class Mavenproject1 {
                     System.out.println("2. RETROCEDER");
                     opcion = scanner.nextInt() ;
                     }while(opcion != 2) ;
-        
-        
-}//Fin Caso 3
+    
+    
+    }
+    
+    
     
     
     
