@@ -5,6 +5,9 @@
 package com.mycompany.mavenproject1;
 
 import java.util.Scanner;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 
 /**
  *
@@ -16,7 +19,8 @@ public class Mavenproject1 {
     static double Precio ;
     static double Stock ;
     static String CUnico ; //Variable para codigo repetido
-    static String Dato ; //Variabel para buscar 
+    static String Dato ; //Variabel para buscar
+    static int ContadorVentas = 0 ; //Variable para registro ventas
     static int contador = 0 ;    
     static Scanner scanner=new Scanner(System.in);
     static String[] NombreUsuario = new String[10] ; //Vector para usuario
@@ -26,6 +30,8 @@ public class Mavenproject1 {
     static double[] Precios = new double[25] ; //Vector para precios producto
     static double[] CantidadStock = new double[25] ; //Vector para stock producto
     static String[] CodigoUnico = new String[25] ; //Vector para código único producto
+    static String[] FechaVentas = new String[25] ; //Vector para las fechas de las ventas
+    static String[] HoraVentas = new String[25] ; //Vector para la hora de las ventas
     static int opcion = 0 ; //Contador para vectores
     
     
@@ -292,13 +298,17 @@ public class Mavenproject1 {
     
     //Inicio metodo 4
     public static void Caso4() {
-        int PosElim = 0;
         double Venta = 0; //Varibale para venta producto
+        int NumeroVentas = 0 ;
         do{
             int rep = 0 ;
                         scanner.nextLine();
                    System.out.println("--- REGSITRAR VENTA ---");
-                   System.out.println("INGRESAR CODIGO UNICO DEL PRODUCTO A VENDER");
+                   System.out.println("INGRESAR CANTIDAD DE PRODUCTOS A VENDER");
+                   NumeroVentas = scanner.nextInt() ;
+                   while(ContadorVentas < NumeroVentas){
+                   scanner.nextLine() ;
+                   System.out.println("INGRESAR CODIGO UNICO DEL PRODUCTO " + ContadorVentas++ + " A VENDER");
                     Dato = scanner.nextLine() ;
                     for(int i=0; i < contador; i++){
                         if(CodigoUnico[i] != null && CodigoUnico[i].equalsIgnoreCase(Dato)){
@@ -310,62 +320,35 @@ public class Mavenproject1 {
                             System.out.println("Stock de Producto: "+ CantidadStock[i]);
                             System.out.println("INGRESAR CANTIDAD DE UNIDADES A VENDER: ");
                             Venta = scanner.nextInt() ;
-                            if(CantidadStock[i]<= Venta){
-                            CantidadStock[i] = CantidadStock[i] - Venta ;
-                            if(CantidadStock[i]-Venta == 0){
-                            for(int j = PosElim ; j < contador - 1; j++){
-                            NombreProducto[j] = NombreProducto[j+1];
-                            CategoriaProducto[j] = CategoriaProducto[j+1];
-                            Precios[j] = Precios[j+1];
-                            CantidadStock[j] = CantidadStock[j+1];
-                            CodigoUnico[j] = CodigoUnico[j+1];
-                        }
-                    
-                            NombreProducto[contador-1] = null;
-                            CategoriaProducto[contador-1] = null;
-                            Precios[contador-1] = 0;
-                            CantidadStock[contador-1] = 0;
-                            CodigoUnico[contador-1] = null;
-
-                            contador--;    
-                            }
                             
+                            if(CantidadStock[i]>= Venta){
+                            CantidadStock[i] = CantidadStock[i] - Venta ;
+                            
+                            LocalDateTime FechaActual = LocalDateTime.now() ;
+                            DateTimeFormatter FormatoFecha = DateTimeFormatter.ofPattern("MMMM dd yyyy") ;
+                            String Fecha = FormatoFecha.format(FechaActual);
+                            
+                            LocalDateTime HoraActual = LocalDateTime.now() ;
+                            DateTimeFormatter FormatoHora = DateTimeFormatter.ofPattern("HH : mm") ;
+                            String Hora = FormatoHora.format(HoraActual);
+                            
+                            FechaVentas[ContadorVentas] = Fecha ;
+                            HoraVentas[ContadorVentas] = Hora ;
+
+                            System.out.println("VENTA REGISRADA CORRECTAMENTE");
                             } else{
                                 System.out.println("NO HAY STOCK SUFICIENTE PARA REALIZAR LA VENTA");
                                 System.out.println("Hay "+ CantidadStock[i] + " unidades de este producto");
                         }
-                            System.out.println("1. ACEPTAR");
-                            System.out.println("2. RETROCEDER");
-                            opcion = scanner.nextInt() ;
-                        }                   
+                          
+                       }                   
                     }
                     if(rep == 0){
                         System.out.println("NO SE HA ENCONTRADO EL PRODUCTO");
                     }
-                    if(opcion == 1) {
-                        for(int j = PosElim ; j < contador - 1; j++){
-                    NombreProducto[j] = NombreProducto[j+1];
-                    CategoriaProducto[j] = CategoriaProducto[j+1];
-                    Precios[j] = Precios[j+1];
-                    CantidadStock[j] = CantidadStock[j+1];
-                    CodigoUnico[j] = CodigoUnico[j+1];
-                    }
-                    
-                    NombreProducto[contador-1] = null;
-                    CategoriaProducto[contador-1] = null;
-                    Precios[contador-1] = 0;
-                    CantidadStock[contador-1] = 0;
-                    CodigoUnico[contador-1] = null;
-
-                    contador--;
-                    System.out.println("EL PRODUCTO HA SIDO ELIMINADO");
-
-                       
-                   } else {
-                      System.out.println("ELIMINACIÓN CANCELADA");  
-                    }
-                    
-                    System.out.println("1. ELIMINAR OTRO PRODUCTO");
+                    ContadorVentas++ ;
+                    }//finwhile 
+                    System.out.println("1. VENDER OTRO PRODUCTO");
                     System.out.println("2. RETROCEDER");
                     opcion = scanner.nextInt() ;
                     }while(opcion != 2) ;
