@@ -4,9 +4,22 @@
 
 package com.mycompany.mavenproject1;
 
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.Scanner;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+
 
 
 /**
@@ -32,10 +45,15 @@ public class Mavenproject1 {
     static String[] CodigoUnico = new String[25] ; //Vector para código único producto
     static String[] FechaVentas = new String[25] ; //Vector para las fechas de las ventas
     static String[] HoraVentas = new String[25] ; //Vector para la hora de las ventas
+    static double[] TotalVenta = new double[25] ; //Vector para Suma total de las ventas
+    static double[] UnidadVenta = new double[25] ; //Vector para Unidades Vendidas
+    static String[] ProductoVendido = new String[25] ; //VEctor para producto vendido
+    
+    
     static int opcion = 0 ; //Contador para vectores
     
     
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         
         System.out.println("-----GESTION DE PRODUCTOS-----");
         System.out.println("INGRESAR NOMBRE DE USUARIO");
@@ -68,7 +86,14 @@ public class Mavenproject1 {
                        
                 case 4:
                        Caso4 () ;
-                       break ; 
+                       break ;
+                       
+                case 5:
+                       Caso5 () ;
+                       break;
+                       
+                case 6:
+                       Caso6 () ;
             }  //Fin switch  
 
             
@@ -297,7 +322,7 @@ public class Mavenproject1 {
 }//Fin Caso 3
     
     //Inicio metodo 4
-    public static void Caso4() {
+    public static void Caso4() throws FileNotFoundException {
         double Venta = 0; //Varibale para venta producto
         int NumeroVentas = 0 ;
         do{
@@ -308,7 +333,7 @@ public class Mavenproject1 {
                    NumeroVentas = scanner.nextInt() ;
                    while(ContadorVentas < NumeroVentas){
                    scanner.nextLine() ;
-                   System.out.println("INGRESAR CODIGO UNICO DEL PRODUCTO " + ContadorVentas++ + " A VENDER");
+                   System.out.println("INGRESAR CODIGO UNICO DEL PRODUCTO A VENDER");
                     Dato = scanner.nextLine() ;
                     for(int i=0; i < contador; i++){
                         if(CodigoUnico[i] != null && CodigoUnico[i].equalsIgnoreCase(Dato)){
@@ -318,24 +343,29 @@ public class Mavenproject1 {
                             System.out.println("Categoria de Producto: "+ CategoriaProducto[i]);
                             System.out.println("Precio Prducto "+"Q."+ Precios[i]);
                             System.out.println("Stock de Producto: "+ CantidadStock[i]);
+                            ProductoVendido[ContadorVentas] = NombreProducto[i] ;
                             System.out.println("INGRESAR CANTIDAD DE UNIDADES A VENDER: ");
                             Venta = scanner.nextInt() ;
                             
                             if(CantidadStock[i]>= Venta){
-                            CantidadStock[i] = CantidadStock[i] - Venta ;
+                                    CantidadStock[i] = CantidadStock[i] - Venta ;
+                                    TotalVenta[ContadorVentas] = Precios[i]*Venta ;
+                                    UnidadVenta[ContadorVentas] = Venta ;
+                                    
+                                    LocalDateTime FechaActual = LocalDateTime.now() ;
+                                    DateTimeFormatter FormatoFecha = DateTimeFormatter.ofPattern("MMMM dd yyyy") ;
+                                    String Fecha = FormatoFecha.format(FechaActual);
+                                    
+                                    LocalDateTime HoraActual = LocalDateTime.now() ;
+                                    DateTimeFormatter FormatoHora = DateTimeFormatter.ofPattern("HH : mm") ;
+                                    String Hora = FormatoHora.format(HoraActual);
+                                    
+                                    FechaVentas[ContadorVentas] = Fecha ;
+                                    HoraVentas[ContadorVentas] = Hora ;
+                                
+                                System.out.println("VENTA REGISRADA CORRECTAMENTE");
                             
-                            LocalDateTime FechaActual = LocalDateTime.now() ;
-                            DateTimeFormatter FormatoFecha = DateTimeFormatter.ofPattern("MMMM dd yyyy") ;
-                            String Fecha = FormatoFecha.format(FechaActual);
                             
-                            LocalDateTime HoraActual = LocalDateTime.now() ;
-                            DateTimeFormatter FormatoHora = DateTimeFormatter.ofPattern("HH : mm") ;
-                            String Hora = FormatoHora.format(HoraActual);
-                            
-                            FechaVentas[ContadorVentas] = Fecha ;
-                            HoraVentas[ContadorVentas] = Hora ;
-
-                            System.out.println("VENTA REGISRADA CORRECTAMENTE");
                             } else{
                                 System.out.println("NO HAY STOCK SUFICIENTE PARA REALIZAR LA VENTA");
                                 System.out.println("Hay "+ CantidadStock[i] + " unidades de este producto");
@@ -354,7 +384,133 @@ public class Mavenproject1 {
                     }while(opcion != 2) ;
     
     
-    }
+    }// Fin Caso 4
+    
+    
+
+    public static void Caso5() throws FileNotFoundException {
+    
+    scanner.nextLine() ;
+        System.out.println("--- GENERACION DE REPORTES ---");
+        System.out.println("1. Reporte de Stock") ;
+        System.out.println("2. Reporte de Ventas") ;
+        System.out.println("3. Retroceder");
+        opcion = scanner.nextInt() ;
+        
+        switch (opcion) {
+                case 1:                    
+                try {
+                        LocalDateTime ahora = LocalDateTime.now();
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd_MM_yyyy_HH_mm_ss");
+                        String FechaHora = ahora.format(formatter);
+                    
+                        Document document = new Document() ;
+                        String destino = "C:\\Users\\pc1\\Desktop\\PDFS INVENTARIO\\ INVENTARIO" +FechaHora+".pdf";
+                        PdfWriter.getInstance(document, new FileOutputStream(destino)) ;
+                        document.open();
+                                    
+                        Paragraph Titulo = new Paragraph() ;
+                        Font fontitulo = new Font(Font.FontFamily.HELVETICA,14,Font.BOLD,BaseColor.BLACK) ;
+                        Titulo.add(new Phrase("REPORTE DE INVENTARIO",fontitulo));
+                        Titulo.setAlignment(Element.ALIGN_CENTER) ;
+                        Titulo.add(new Phrase(Chunk.NEWLINE));
+                        Titulo.add(new Phrase(Chunk.NEWLINE));
+                        document.add(Titulo) ;
+                                    
+                        PdfPTable tabla = new PdfPTable(5) ;
+                        tabla.addCell("Nombre") ;
+                        tabla.addCell("Cod. Unico") ;
+                        tabla.addCell("Categoria") ;
+                        tabla.addCell("Precio") ;
+                        tabla.addCell("Stock") ;
+                        for (int i = 0; i < contador; i++) {
+                            if (NombreProducto[i] != null) {
+                            tabla.addCell(NombreProducto[i]);
+                            tabla.addCell(String.valueOf(CodigoUnico[i]));
+                            tabla.addCell(CategoriaProducto[i]);
+                            tabla.addCell(String.format("Q. %.2f", Precios[i]));
+                            tabla.addCell(String.valueOf(CantidadStock[i]));
+                            }
+                                    
+                        }
+           
+                        document.add(tabla);            
+                        document.close();
+                        System.out.println("REPORTE DE INVENTARIO GENERADO CORRECTAMENTE EN "+destino);
+                        
+                                  
+                    } catch (DocumentException ex) {
+                    System.getLogger(Mavenproject1.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+                                }        
+                    break;
+                    
+                    
+                        
+                case 2:    
+                try {
+                        LocalDateTime ahora = LocalDateTime.now();
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd_MM_yyyy_HH_mm_ss");
+                        String fechahora = ahora.format(formatter);
+                    
+                        Document document = new Document() ;
+                        String destino = "C:\\Users\\pc1\\Desktop\\PDFS VENTAS\\VENTAS" +fechahora+".pdf";
+                        PdfWriter.getInstance(document, new FileOutputStream(destino)) ;
+                        document.open();
+                                    
+                        Paragraph Titulo = new Paragraph() ;
+                        Font fontitulo = new Font(Font.FontFamily.HELVETICA,14,Font.BOLD,BaseColor.BLACK) ;
+                        Titulo.add(new Phrase("REPORTE DE VENTAS",fontitulo));
+                        Titulo.setAlignment(Element.ALIGN_CENTER) ;
+                        Titulo.add(new Phrase(Chunk.NEWLINE));
+                        Titulo.add(new Phrase(Chunk.NEWLINE));
+                        document.add(Titulo) ;
+                                    
+                        PdfPTable tabla = new PdfPTable(5) ;
+                        tabla.addCell("Producto") ;
+                        tabla.addCell("U. Vendidas") ;
+                        tabla.addCell("Total") ;
+                        tabla.addCell("Fecha") ;
+                        tabla.addCell("Hora") ;
+                        for (int i = 0; i < contador; i++) {
+                            if (ProductoVendido[i] != null) {
+                            tabla.addCell(ProductoVendido[i]);
+                            tabla.addCell(String.valueOf(UnidadVenta[i]));
+                            tabla.addCell("Q." + TotalVenta[i]);
+                            tabla.addCell(FechaVentas[i]);
+                            tabla.addCell(HoraVentas[i]);
+                            }
+                                    
+                        }
+           
+                        document.add(tabla);            
+                        document.close();
+                        System.out.println("REPORTE DE VENTAS GENERADO CORRECTAMENTE EN "+destino);
+                        
+                                  
+                    } catch (DocumentException ex) {
+                    System.getLogger(Mavenproject1.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+                                }
+                    break ;
+            } //Fin Switch
+               
+    } // Fin Caso 5
+    
+    static public void Caso6(){
+    scanner.nextLine() ;
+        System.out.println("--- DATOS DEL ESTUDIANTE ---") ;
+        System.out.println("NOMBRE: Marvin Alan vladimir Muj Gonzalez");
+        System.out.println("NOMBRE DE USUARIO: " + NombreUsuario[0]);
+        System.out.println("CARNE: " + CarnetUsuario[0]);
+        System.out.println("ASIGNATURA: Laboratorio IPC1");
+        System.out.println("SECCION: F");
+    
+    
+    
+    } //Fin Caso 6   
+        
+    
+    
+            
     
     
     
