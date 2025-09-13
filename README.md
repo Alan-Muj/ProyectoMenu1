@@ -17,6 +17,7 @@ Sistema desarrollado en Java para la gestion de inventario de una tienda de ropa
 - Abrir el proyecto y ejecutarlo.
 
 ### OBSERVACIONES
+- Crear una carpeta llamada "PDFS VENTAS" y "PDFS INVENTARIO" en el escritorio, ya que en el código esta configurado para que se guarden allí los archivos; O bien, cambiar la ruta para guardar los archivos en otra ubicación. 
 - Se puede agregar la opción de bitácora, que permite registrar todos los procesos que se realizan en el programa con fecha y hora.
 - Se podría cambiar los vectores de tamaño 25 por vectores o matrices dinamicos, que permitirian hacer el inventario de cualquier tamaño.
 - A veces no funciona bien el registrar otra venta después de haber registrado otras.
