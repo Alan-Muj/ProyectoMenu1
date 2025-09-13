@@ -497,31 +497,16 @@ public class Mavenproject1 {
     
     static public void Caso6(){
     scanner.nextLine() ;
-        System.out.println("--- DATOS DEL ESTUDIANTE ---") ;
-        System.out.println("NOMBRE: Marvin Alan vladimir Muj Gonzalez");
+        System.out.println("--- DATOS DEL USUARIO ---") ;
         System.out.println("NOMBRE DE USUARIO: " + NombreUsuario[0]);
         System.out.println("CARNE: " + CarnetUsuario[0]);
+        System.out.println("");
+        
+        System.out.println("--- CREADO POR ---");
+        System.out.println("NOMBRE: Marvin Alan vladimir Muj Gonzalez");
         System.out.println("ASIGNATURA: Laboratorio IPC1");
         System.out.println("SECCION: F");
     
-    
-    
     } //Fin Caso 6   
-        
-    
-    
-            
-    
-    
-    
-    
-    
     
 }//Fin public class
-
-
- 
-
-
-
-
